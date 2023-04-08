@@ -16,5 +16,5 @@ jobs:
           file: ./package.json
           query: ./version
       - run: |
-          echo ${{ steps.test.output.file-extension }}
-          echo ${{ steps.test.output.file-version }}
+          echo ${{ steps.test.outputs.file-extension }}
+          echo ${{ steps.test.outputs.file-version }}
