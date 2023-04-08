@@ -36,5 +36,5 @@ runs:
     - id: file-version
       shell: bash
       run: |
-        version=yq eval '${{ inputs.query }}'
+        version=$(yq eval '${{ inputs.query }}')
         echo version=${version} >> $GITHUB_OUTPUT
