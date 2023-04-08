@@ -14,7 +14,7 @@ jobs:
         uses: ./
         with:
           file: ./package.json
-          query: ./version
+          query: .version
       - run: |
           echo ${{ steps.test.outputs.file-extension }}
           echo ${{ steps.test.outputs.file-version }}
