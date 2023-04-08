@@ -36,5 +36,5 @@ runs:
     - id: file-version
       shell: bash
       run: |
-        version=$(cat ${{ inputs.file }} | yq -r '${{ inputs.query }}')
+        version=$(yq -r '${{ inputs.query }}' ${{ inputs.file }})
         echo version=${version} >> $GITHUB_OUTPUT
