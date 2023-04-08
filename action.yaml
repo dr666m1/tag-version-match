@@ -1,0 +1,40 @@
+name: Tag Version Match
+
+description: >
+  Check if tag message corresponds
+  to the version of package.json, Cargo.toml and so on.
+
+inputs:
+  file:
+    description: >
+      file path that contains version information
+      e.g. ./package.json, ./Cargo.toml
+    required: true
+  query:
+    description: >
+      argument of `yq eval` command to extract the version of file such as package.json
+      e.g. .version
+
+outputs:
+  file-extension:
+    description: the extension of the input file
+    value: ${{ steps.file-extension.outputs.extension }}
+  file-version:
+    description: the version extracted using input file and query
+    value: ${{ steps.file-version.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: file-extension
+      shell: bash
+      run: |
+        file=${{ inputs.file }}
+        extension=${file##*.}
+        echo extension=${extension} >> $GITHUB_OUTPUT
+
+    - id: file-version
+      shell: bash
+      run: |
+        version=yq eval '${{ inputs.query }}'
+        echo version=${version} >> $GITHUB_OUTPUT
