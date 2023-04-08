@@ -18,3 +18,21 @@ jobs:
       - run: |
           echo ${{ steps.test.outputs.file-extension }}
           echo ${{ steps.test.outputs.file-version }}
+  toml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cat <<EOS > Cargo.toml
+          A = "hello"
+          B = 12
+          EOS
+      - run: yq -oy '.' Cargo.toml
+#     - id: test
+#       uses: ./
+#       with:
+#         file: ./package.json
+#         query: .version
+#     - run: |
+#         echo ${{ steps.test.outputs.file-extension }}
+#         echo ${{ steps.test.outputs.file-version }}
