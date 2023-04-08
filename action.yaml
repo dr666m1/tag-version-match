@@ -12,7 +12,7 @@ inputs:
     required: true
   query:
     description: >
-      argument of `yq eval` command to extract the version of file such as package.json
+      argument of yq command to extract the version of file such as package.json
       e.g. .version
 
 outputs:
@@ -36,5 +36,5 @@ runs:
     - id: file-version
       shell: bash
       run: |
-        version=$(yq eval '${{ inputs.query }}')
+        version=$(cat ${{ inputs.file }} | yq -r '${{ inputs.query }}')
         echo version=${version} >> $GITHUB_OUTPUT
