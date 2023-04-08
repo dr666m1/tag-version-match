@@ -12,9 +12,9 @@ jobs:
           EOS
       - id: test
         uses: ./
-          with:
-            file: ./package.json
-            query: ./version
+        with:
+          file: ./package.json
+          query: ./version
       - run: |
           echo ${{ steps.test.output.file-extension }}
           echo ${{ steps.test.output.file-version }}
