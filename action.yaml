@@ -14,11 +14,16 @@ inputs:
     description: >
       argument of yq command to extract the version of file such as package.json
       e.g. .version
+  tag:
+    description: usually, you do not have to use this input
+    default: ${{ github.ref_name }}
+    required: true
+
 
 outputs:
-  file-extension:
-    description: the extension of the input file
-    value: ${{ steps.file-extension.outputs.extension }}
+# file-extension:
+#   description: the extension of the input file
+#   value: ${{ steps.file-extension.outputs.extension }}
   file-version:
     description: the version extracted using input file and query
     value: ${{ steps.file-version.outputs.version }}
@@ -26,15 +31,15 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: file-extension
-      shell: bash
-      run: |
-        file=${{ inputs.file }}
-        extension=${file##*.}
-        echo extension=${extension} >> $GITHUB_OUTPUT
+#   - id: file-extension
+#     shell: bash
+#     run: |
+#       file=${{ inputs.file }}
+#       extension=${file##*.}
+#       echo extension=${extension} >> $GITHUB_OUTPUT
 
     - id: file-version
       shell: bash
       run: |
-        version=$(yq -r '${{ inputs.query }}' ${{ inputs.file }})
+        version=$(yq -r -oy '${{ inputs.query }}' ${{ inputs.file }})
         echo version=${version} >> $GITHUB_OUTPUT
