@@ -55,7 +55,6 @@ runs:
 
         tag=${TAG_VERSION_MATCH_TEST_INPUT:-${{ github.ref_name }}}
         version=$(sed -En 's/${{ inputs.pattern }}/\${{ inputs.nth-group }}/p' <<< $tag)
-        echo version is $version
         echo version=${version} >> $GITHUB_OUTPUT
 
     - id: compare-version
