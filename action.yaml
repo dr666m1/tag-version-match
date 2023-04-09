@@ -34,7 +34,8 @@ runs:
       shell: bash
       run: |
         if [[ -v TAG_VERSION_MATCH_TEST_INPUT ]]; then
-          echo '::error title=tag-version-match::TAG_VERSION_MATCH_TEST_INPUT is reserved'
+          echo 'TAG_VERSION_MATCH_TEST_INPUT is reserved!'
+          exit 1
         fi
         echo "end of tag version"
 
