@@ -7,6 +7,7 @@ jobs:
         file:
           - package.json
           - Cargo.toml
+          - pyproject.toml
         include:
           - file: package.json
             text: |
@@ -19,6 +20,11 @@ jobs:
               [package]
               version = "1.0.0"
             query: .package.version
+          - file: pyproject.toml
+            text: |
+              [tool.poetry]
+              version = "1.0.0"
+            query: .tool.poetry.version
     steps:
       - uses: actions/checkout@v3
       - run: |
