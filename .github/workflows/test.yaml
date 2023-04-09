@@ -36,3 +36,31 @@ jobs:
           query: .package.version
       - run: |
           echo ${{ steps.test.outputs.file-version }}
+
+  pattern:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-case:
+          - tag: v1.0.0
+            pattern: '^v([0-9]\.[0-9]\.[0-9])$'
+            nth-group: '1'
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cat <<EOF > package.json
+          {
+            "version": "1.0.0"
+          }
+          EOF
+      - id: test
+        uses: ./
+        env:
+          TAG_VERSION_MATCH_TEST_INPUT: ${{ matrix.test-case.tag }}
+        with:
+          file: ./package.json
+          query: .version
+          pattern: ${{ matrix.test-case.nth-group }}
+          nth-group: ${{ matrix.test-case.nth-group }}
+      - run: |
+          [[ ${{ steps.test.outputs.file-version }} == ${{ steps.test.outputs.tag-version }} ]]
