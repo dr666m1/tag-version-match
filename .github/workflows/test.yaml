@@ -59,7 +59,8 @@ jobs:
         with:
           file: ${{ matrix.test-case.file }}
           query: ${{ matrix.test-case.query }}
-      - run: [[ ${{ steps.test.outputs.file-version }} == "1.0.0" ]]
+      - run: |
+          [[ ${{ steps.test.outputs.file-version }} == "1.0.0" ]]
 
   tag-pattern-group:
     runs-on: ubuntu-latest
