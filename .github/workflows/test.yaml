@@ -1,7 +1,62 @@
 on: [push]
 jobs:
-  json:
+  file-query:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        file:
+          - package.json
+          - Cargo.toml
+          - pyproject.toml
+        include:
+          - file: package.json
+            text: |
+              {
+                "version": "1.0.0"
+              }
+            query: .version
+          - file: Cargo.toml
+            text: |
+              [package]
+              version = "1.0.0"
+            query: .package.version
+          - file: pyproject.toml
+            text: |
+              [tool.poetry]
+              version = "1.0.0"
+            query: .tool.poetry.version
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cat <<EOF > ${{ matrix.file }}
+          ${{ matrix.text }}
+          EOF
+      - id: test
+        uses: ./
+        with:
+          file: ${{ matrix.file }}
+          query: ${{ matrix.query }}
+      - run: |
+          [[ ${{ steps.test.outputs.file-version }} == "1.0.0" ]]
+
+  tag-pattern-group:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag:
+          - v1.0.0
+          - v1.0.0-beta
+          - 1.0.0
+        include:
+          - tag: v1.0.0
+            pattern: '^v([0-9]\.[0-9]\.[0-9])$'
+            nth-group: '1'
+          - tag: v1.0.0-beta
+            pattern: '^v([0-9]\.[0-9]\.[0-9])(-beta)?$'
+            nth-group: '1'
+          - tag: 1.0.0
+            pattern: '[0-9]\.[0-9]\.[0-9]'
+            nth-group: '0'
     steps:
       - uses: actions/checkout@v3
       - run: |
@@ -12,27 +67,12 @@ jobs:
           EOF
       - id: test
         uses: ./
+        env:
+          TAG_VERSION_MATCH_TEST_INPUT: ${{ matrix.tag }}
         with:
           file: ./package.json
           query: .version
+          pattern: '${{ matrix.pattern }}'
+          nth-group: '${{ matrix.nth-group }}'
       - run: |
-          echo ${{ steps.test.outputs.file-version }}
-
-  toml:
-    runs-on: ubuntu-latest
-    env:
-      TAG_VERSION_MATCH_TEST_INPUT: v1.0.0
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          cat <<EOF > Cargo.toml
-          [package]
-          version = "1.0.0"
-          EOF
-      - id: test
-        uses: ./
-        with:
-          file: ./Cargo.toml
-          query: .package.version
-      - run: |
-          echo ${{ steps.test.outputs.file-version }}
+          [[ ${{ steps.test.outputs.file-version }} == ${{ steps.test.outputs.tag-version }} ]]
