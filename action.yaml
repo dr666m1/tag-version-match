@@ -33,10 +33,14 @@ runs:
     - id: tag-version
       shell: bash
       run: |
-        if [[ -v TAG_VERSION_MATCH_TEST_INPUT ]]; then
+        if [[
+          -v TAG_VERSION_MATCH_TEST_INPUT &&
+          ${{ github.repository_id }} != '625217715'
+        ]]; then # 625217715 is the id of this repository
           echo 'TAG_VERSION_MATCH_TEST_INPUT is reserved!'
           exit 1
         fi
+
         echo "end of tag version"
 
     - id: compare-version
