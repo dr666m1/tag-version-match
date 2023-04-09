@@ -39,7 +39,7 @@ runs:
         echo "end of tag version"
 
     - id: compare-version
-      if: ${{ github.ref_type == "tag" }}
+      if: ${{ github.ref_type == 'tag' }}
       shell: bash
       run: |
         # TODO
