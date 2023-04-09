@@ -1,8 +1,4 @@
-# https://stackoverflow.com/questions/68573888
-on:
-  push:
-    branches:
-      - '**'
+on: [push]
 
 jobs:
   file-query:
@@ -38,6 +34,8 @@ jobs:
           EOF
       - id: test
         uses: ./
+        env:
+          TAG_VERSION_MATCH_TEST_INPUT: v1.0.0
         with:
           file: ${{ matrix.file }}
           query: ${{ matrix.query }}
