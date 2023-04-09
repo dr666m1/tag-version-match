@@ -45,6 +45,12 @@ jobs:
           - tag: v1.0.0
             pattern: '^v([0-9]\.[0-9]\.[0-9])$'
             nth-group: '1'
+          - tag: v1.0.0-beta
+            pattern: '^v([0-9]\.[0-9]\.[0-9])(-beta)?$'
+            nth-group: '1'
+          - tag: 1.0.0
+            pattern: '[0-9]\.[0-9]\.[0-9]'
+            nth-group: '0'
     steps:
       - uses: actions/checkout@v3
       - run: |
