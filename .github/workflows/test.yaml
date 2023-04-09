@@ -60,7 +60,7 @@ jobs:
         with:
           file: ./package.json
           query: .version
-          pattern: ${{ matrix.test-case.nth-group }}
-          nth-group: ${{ matrix.test-case.nth-group }}
+          pattern: '${{ matrix.test-case.pattern }}'
+          nth-group: '${{ matrix.test-case.nth-group }}'
       - run: |
           [[ ${{ steps.test.outputs.file-version }} == ${{ steps.test.outputs.tag-version }} ]]
