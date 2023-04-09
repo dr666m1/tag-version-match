@@ -31,6 +31,7 @@ runs:
 
     # TODO
     - id: tag-version
+      shell: bash
       run: |
         if [[ -v TAG_VERSION_MATCH_TEST_INPUT ]]; then
           echo '::error title=tag-version-match::TAG_VERSION_MATCH_TEST_INPUT is reserved'
