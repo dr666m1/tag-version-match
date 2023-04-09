@@ -1,42 +1,5 @@
 on: [push]
 jobs:
-  json:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          cat <<EOF > package.json
-          {
-            "version": "1.0.0"
-          }
-          EOF
-      - id: test
-        uses: ./
-        with:
-          file: ./package.json
-          query: .version
-      - run: |
-          echo ${{ steps.test.outputs.file-version }}
-
-  toml:
-    runs-on: ubuntu-latest
-    env:
-      TAG_VERSION_MATCH_TEST_INPUT: v1.0.0
-    steps:
-      - uses: actions/checkout@v3
-      - run: |
-          cat <<EOF > Cargo.toml
-          [package]
-          version = "1.0.0"
-          EOF
-      - id: test
-        uses: ./
-        with:
-          file: ./Cargo.toml
-          query: .package.version
-      - run: |
-          echo ${{ steps.test.outputs.file-version }}
-
   file-query:
     runs-on: ubuntu-latest
     strategy:
@@ -48,6 +11,11 @@ jobs:
                 "version": "1.0.0"
               }
             query: .version
+          - file: Cargo.toml
+            text: |
+              [package]
+              version = "1.0.0"
+            query: .package.version
     steps:
       - uses: actions/checkout@v3
       - run: |
