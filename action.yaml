@@ -14,6 +14,18 @@ inputs:
     description: >
       argument of yq command to extract the version of file such as package.json
       e.g. .version
+    required: true
+  pattern:
+    description: >
+      extended regex of sed command to extract the version from tag
+      (by default, first group is extracted)
+    required: true
+    default: '^v([0-9]\.[0-9]\.[0-9])$'
+  nth-group:
+    description: >
+      the number of group to extract from pattern
+    required: true
+    default: '1'
 
 outputs:
   file-version:
@@ -29,7 +41,6 @@ runs:
         version=$(yq -r -oy '${{ inputs.query }}' ${{ inputs.file }})
         echo version=${version} >> $GITHUB_OUTPUT
 
-    # TODO
     - id: tag-version
       shell: bash
       run: |
@@ -43,11 +54,11 @@ runs:
         fi
 
         tag=${TAG_VERSION_MATCH_TEST_INPUT:-${{ github.ref_name }}}
-        echo $tag
+        version=$(sed -En 's/${{ inputs.pattern }}/\${{ inputs.nth-group }}/p' <<< $tag)
+        echo $version=${version} >> $GITHUB_OUTPUT
 
     - id: compare-version
       if: ${{ github.ref_type == 'tag' }}
       shell: bash
       run: |
-        # TODO
         [[ ${{ steps.file-version.outputs.version }} == ${{ steps.tag-version.outputs.version }} ]]

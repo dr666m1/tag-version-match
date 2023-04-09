@@ -7,11 +7,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          cat <<EOS > package.json
+          cat <<EOF > package.json
           {
             "version": "1.0.0"
           }
-          EOS
+          EOF
       - id: test
         uses: ./
         with:
@@ -25,10 +25,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          cat <<EOS > Cargo.toml
+          cat <<EOF > Cargo.toml
           [package]
           version = "1.0.0"
-          EOS
+          EOF
       - id: test
         uses: ./
         with:
