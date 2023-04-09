@@ -37,7 +37,31 @@ jobs:
       - run: |
           echo ${{ steps.test.outputs.file-version }}
 
-  pattern:
+  file-query:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-case:
+          - file: package.json
+            text: |
+              {
+                "version": "1.0.0"
+              }
+            query: .version
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          cat <<EOF > ${{ matrix.test-case.file }}
+          ${{ matrix.test-case.text }}
+          EOF
+      - id: test
+        uses: ./
+        with:
+          file: ${{ matrix.test-case.file }}
+          query: ${{ matrix.test-case.query }}
+      - run: [[ ${{ steps.test.outputs.file-version }} == "1.0.0" ]]
+
+  tag-pattern-group:
     runs-on: ubuntu-latest
     strategy:
       matrix:
