@@ -31,6 +31,9 @@ outputs:
   file-version:
     description: the version extracted using input file and query
     value: ${{ steps.file-version.outputs.version }}
+  tag-version:
+    description: the version extracted from tag
+    value: ${{ steps.tag-version.outputs.version }}
 
 runs:
   using: "composite"
