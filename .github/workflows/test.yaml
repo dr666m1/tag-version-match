@@ -1,4 +1,9 @@
-on: [push]
+# https://stackoverflow.com/questions/68573888
+on:
+  push:
+    branches:
+      - '**'
+
 jobs:
   file-query:
     runs-on: ubuntu-latest
