@@ -4,7 +4,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test-case:
+        file:
+          - package.json
+          - Cargo.toml
+        include:
           - file: package.json
             text: |
               {
@@ -19,14 +22,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          cat <<EOF > ${{ matrix.test-case.file }}
-          ${{ matrix.test-case.text }}
+          cat <<EOF > ${{ matrix.file }}
+          ${{ matrix.text }}
           EOF
       - id: test
         uses: ./
         with:
-          file: ${{ matrix.test-case.file }}
-          query: ${{ matrix.test-case.query }}
+          file: ${{ matrix.file }}
+          query: ${{ matrix.query }}
       - run: |
           [[ ${{ steps.test.outputs.file-version }} == "1.0.0" ]]
 
@@ -34,7 +37,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test-case:
+        tag:
+          - v1.0.0
+          - v1.0.0-beta
+          - 1.0.0
+        include:
           - tag: v1.0.0
             pattern: '^v([0-9]\.[0-9]\.[0-9])$'
             nth-group: '1'
@@ -55,11 +62,11 @@ jobs:
       - id: test
         uses: ./
         env:
-          TAG_VERSION_MATCH_TEST_INPUT: ${{ matrix.test-case.tag }}
+          TAG_VERSION_MATCH_TEST_INPUT: ${{ matrix.tag }}
         with:
           file: ./package.json
           query: .version
-          pattern: '${{ matrix.test-case.pattern }}'
-          nth-group: '${{ matrix.test-case.nth-group }}'
+          pattern: '${{ matrix.pattern }}'
+          nth-group: '${{ matrix.nth-group }}'
       - run: |
           [[ ${{ steps.test.outputs.file-version }} == ${{ steps.test.outputs.tag-version }} ]]
