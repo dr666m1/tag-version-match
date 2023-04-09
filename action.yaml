@@ -20,7 +20,7 @@ inputs:
       extended regex of sed command to extract the version from tag
       (by default, first group is extracted)
     required: true
-    default: '^v([0-9]\.[0-9]\.[0-9])$'
+    default: '^v([0-9]+\.[0-9]+\.[0-9]+)$'
   nth-group:
     description: >
       the number of group to extract from pattern
