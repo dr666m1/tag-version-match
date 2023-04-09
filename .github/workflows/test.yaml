@@ -2,8 +2,6 @@ on: [push]
 jobs:
   json:
     runs-on: ubuntu-latest
-    env:
-      TAG_VERSION_MATCH_TEST_INPUT: v1.0.0
     steps:
       - uses: actions/checkout@v3
       - run: |
@@ -22,6 +20,8 @@ jobs:
 
   toml:
     runs-on: ubuntu-latest
+    env:
+      TAG_VERSION_MATCH_TEST_INPUT: v1.0.0
     steps:
       - uses: actions/checkout@v3
       - run: |
